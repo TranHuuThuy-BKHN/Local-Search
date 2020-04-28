@@ -213,12 +213,12 @@ public class BKPostLocalSearch {
     }
 
     public static void main(String[] args) {
-        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_50");
+        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_20");
         BKPostLocalSearch app = new BKPostLocalSearch(3, dataset);
 
         app.mapping();
         app.stateModel();
-        app.search(100);
+        app.search(1000);
     }
 
 }
