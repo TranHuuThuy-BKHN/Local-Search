@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="CBLSCR">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/CBLSCR.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
