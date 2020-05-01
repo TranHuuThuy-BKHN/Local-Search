@@ -41,9 +41,9 @@ public class GuiBKPost {
         canvas.repaint();
         double max = Integer.MIN_VALUE;
         for (BKPostLocalSearch.Point2D p : points) {
-            max = Math.max(max, Math.max(p.x, p.y));
+            max = Math.max(max, Math.max(Math.abs(p.x), Math.abs(p.y)));
         }
-        int scale = (int) (frame.getWidth() / 2 / max);
+        float scale = (float) (frame.getWidth() / 2 / max * 0.8);
 
         g.setColor(Color.BLUE);
         g.drawString("Police Office", scale * (float) points.get(0).x, -scale * (float) points.get(0).y - 8);

@@ -155,7 +155,7 @@ public class BKPostLocalSearch {
         initSolution();
         int i = 0;
         ArrayList<Move> cand = new ArrayList<>();
-
+//
         ArrayList<ArrayList<Integer>> roadmaps = new ArrayList<>();
 
         GuiBKPost gui = new GuiBKPost("Gui BK Post Local Search", new Dimension(600, 600));
@@ -213,8 +213,8 @@ public class BKPostLocalSearch {
     }
 
     public static void main(String[] args) {
-        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_20");
-        BKPostLocalSearch app = new BKPostLocalSearch(3, dataset);
+        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_am_50");
+        BKPostLocalSearch app = new BKPostLocalSearch(5, dataset);
 
         app.mapping();
         app.stateModel();

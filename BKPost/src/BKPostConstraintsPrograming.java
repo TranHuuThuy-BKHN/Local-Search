@@ -112,8 +112,8 @@ public class BKPostConstraintsPrograming {
     }
 
     public static void main(String[] args) {
-        DatasetContraintsPrograming dataset = new DatasetContraintsPrograming("./Dataset Local Search/data_50");
-        BKPostConstraintsPrograming app = new BKPostConstraintsPrograming(2, dataset);
+        DatasetContraintsPrograming dataset = new DatasetContraintsPrograming("./Dataset Local Search/data_100");
+        BKPostConstraintsPrograming app = new BKPostConstraintsPrograming(5, dataset);
         app.search();
     }
 }

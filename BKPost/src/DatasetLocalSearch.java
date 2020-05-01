@@ -23,9 +23,9 @@ public class DatasetLocalSearch {
         Scanner sc = new Scanner(System.in);
         N = Integer.parseInt(sc.nextLine());
         for (int i = 0; i < N; i++) {
-            String number[] = sc.nextLine().split(",");
-            double x = Double.parseDouble(number[0].substring(1));
-            double y = Double.parseDouble(number[1].substring(1, number[1].length() - 1));
+            String number[] = sc.nextLine().split("\\s+");
+            double x = Double.parseDouble(number[0]);
+            double y = Double.parseDouble(number[1]);
             points.add(new BKPostLocalSearch.Point2D(x, y));
         }
         sc.nextLine();
