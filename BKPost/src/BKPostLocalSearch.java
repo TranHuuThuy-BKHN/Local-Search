@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class BKPostLocalSearch {
+    public static final String ONE_POINT_MOVE = "One Point Move";
+    public static final String TWO_POINTS_MOVE = "Two Points Move";
+    public static final String TWO_OPT_MOVE_1 = "Two Opt Move 1";
+
     int K = 2; // number of posters
     int N = 10; // number of clients
 
@@ -128,7 +132,7 @@ public class BKPostLocalSearch {
     }
 
 
-    public void exploreNeighborhood(ArrayList<Move> cand) {
+    public void exploreNeighborhoodOnePointMove(ArrayList<Move> cand) {
         cand.clear();
         double minDelta = Double.MAX_VALUE;
 
@@ -151,35 +155,109 @@ public class BKPostLocalSearch {
         }
     }
 
-    public void search(int loop) {
+    public void exploreNeighborhoodTowPointsMove(ArrayList<Move> cand) {
+        cand.clear();
+        double minDelta = Double.MAX_VALUE;
+        for (int k = 1; k <= K; k++) {
+            for (Point y = routers.next(routers.startPoint(k)); y != routers.endPoint(k); y = routers.next(y)) {
+                for (Point x = routers.prev(y); x != routers.startPoint(k); x = routers.prev(x)) {
+                    if (x == routers.next(y)) continue;
+
+                    double deltaObj = obj.evaluateTwoPointsMove(x, y);
+
+                    if (deltaObj < minDelta) {
+                        minDelta = deltaObj;
+                        cand.clear();
+                        cand.add(new Move(x, y));
+                    } else if (deltaObj == minDelta) {
+                        cand.add(new Move(x, y));
+                    }
+                }
+            }
+        }
+    }
+
+    public void exploreNeighborhoodTowOptMove(ArrayList<Move> cand) {
+        cand.clear();
+        double minDelta = Double.MAX_VALUE;
+        for (int k1 = 1; k1 < K; k1++) {
+            for (int k2 = k1 + 1; k2 <= K; k2++) {
+                for (Point y = routers.startPoint(k1); y != routers.endPoint(k1); y = routers.next(y)) {
+                    for (Point x = routers.startPoint(k2); x != routers.endPoint(k2); x = routers.next(x)) {
+                        if (x == routers.startPoint(k2) || y == routers.startPoint(k1)) continue;
+
+                        double deltaObj = obj.evaluateTwoOptMove1(x, y);
+
+                        if (deltaObj < minDelta) {
+                            minDelta = deltaObj;
+                            cand.clear();
+                            cand.add(new Move(x, y));
+                        } else if (deltaObj == minDelta) {
+                            cand.add(new Move(x, y));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void search(int loop, final String TYPE) {
         initSolution();
         int i = 0;
         ArrayList<Move> cand = new ArrayList<>();
-//
         ArrayList<ArrayList<Integer>> roadmaps = new ArrayList<>();
+        Move m;
 
-        GuiBKPost gui = new GuiBKPost("Gui BK Post Local Search", new Dimension(600, 600));
+       // GuiBKPost gui = new GuiBKPost("Gui BK Post Local Search", new Dimension(600, 600));
 
         while (i++ < loop) {
-            exploreNeighborhood(cand);
-            if (cand.size() == 0) {
-                System.out.println("Local Optimazation");
-                break;
+            switch (TYPE) {
+                case ONE_POINT_MOVE:
+                    exploreNeighborhoodOnePointMove(cand);
+                    if (cand.size() == 0) {
+                        System.out.println("Local Optimazation");
+                        break;
+                    }
+                    m = cand.get(R.nextInt(cand.size()));
+                    mgr.performOnePointMove(m.x, m.y);
+                    break;
+
+                case TWO_POINTS_MOVE:
+                    exploreNeighborhoodTowPointsMove(cand);
+                    if (cand.size() == 0) {
+                        System.out.println("Local Optimazation");
+                        break;
+                    }
+                    m = cand.get(R.nextInt(cand.size()));
+                    mgr.performTwoPointsMove(m.x, m.y);
+                    break;
+
+                case TWO_OPT_MOVE_1:
+                    exploreNeighborhoodTowOptMove(cand);
+                    if (cand.size() == 0) {
+                        System.out.println("Local Optimazation");
+                        break;
+                    }
+                    m = cand.get(R.nextInt(cand.size()));
+                    mgr.performTwoOptMove1(m.x, m.y);
+                    break;
+
+                default:
+                    System.err.println(TYPE + " not define");
             }
-            Move m = cand.get(R.nextInt(cand.size()));
-            mgr.performOnePointMove(m.x, m.y);
+
             System.out.println("Step " + i + ", objective = " + obj.getValue());
 
             //draw GUI
-            roadmaps.clear();
-            for (int k = 1; k <= K; k++) {
-                ArrayList<Integer> roadmap = new ArrayList<>();
-                for(Point p = routers.startPoint(k); p != routers.endPoint(k); p = routers.next(p)){
-                    roadmap.add(p.ID);
-                }
-                roadmaps.add(roadmap);
-            }
-            gui.drawRouter(points, roadmaps);
+//            roadmaps.clear();
+//            for (int k = 1; k <= K; k++) {
+//                ArrayList<Integer> roadmap = new ArrayList<>();
+//                for (Point p = routers.startPoint(k); p != routers.endPoint(k); p = routers.next(p)) {
+//                    roadmap.add(p.ID);
+//                }
+//                roadmaps.add(roadmap);
+//            }
+//            gui.drawRouter(points, roadmaps);
         }
         System.out.println(routers.toString());
         for (int k = 1; k <= K; k++) {
@@ -213,12 +291,12 @@ public class BKPostLocalSearch {
     }
 
     public static void main(String[] args) {
-        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_am_50");
-        BKPostLocalSearch app = new BKPostLocalSearch(5, dataset);
+        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_am_1000");
+        BKPostLocalSearch app = new BKPostLocalSearch(4, dataset);
 
         app.mapping();
         app.stateModel();
-        app.search(1000);
+        app.search(100, TWO_OPT_MOVE_1);
     }
 
 }
