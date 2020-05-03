@@ -16,6 +16,7 @@ public class BKPostLocalSearch {
     public static final String ONE_POINT_MOVE = "One Point Move";
     public static final String TWO_POINTS_MOVE = "Two Points Move";
     public static final String TWO_OPT_MOVE_1 = "Two Opt Move 1";
+    public static final String CROSS_EXCHANGE_MOVE = "Cross Exchange Move";
 
     int K = 2; // number of posters
     int N = 10; // number of clients
@@ -160,7 +161,7 @@ public class BKPostLocalSearch {
         double minDelta = Double.MAX_VALUE;
         for (int k = 1; k <= K; k++) {
             for (Point y = routers.next(routers.startPoint(k)); y != routers.endPoint(k); y = routers.next(y)) {
-                for (Point x = routers.prev(y); x != routers.startPoint(k); x = routers.prev(x)) {
+                for (Point x = routers.next(y); x != routers.endPoint(k); x = routers.next(x)) {
                     if (x == routers.next(y)) continue;
 
                     double deltaObj = obj.evaluateTwoPointsMove(x, y);
@@ -201,14 +202,38 @@ public class BKPostLocalSearch {
         }
     }
 
+    public void exploreNeighborhoodCrossExchangeMove(ArrayList<Move> cand) {
+        cand.clear();
+        double minDelta = Double.MAX_VALUE;
+
+        for (int k1 = 1; k1 < K; k1++) {
+            for (int k2 = k1 + 1; k2 <= K; k2++) {
+                for (Point y1 = routers.startPoint(k1); y1 != routers.endPoint(k1); y1 = routers.next(y1)) {
+                    for (Point x1 = routers.startPoint(k1); x1 != y1; x1 = routers.next(x1)) {
+                        for (Point y2 = routers.startPoint(k2); y2 != routers.endPoint(k2); y2 = routers.next(y2)) {
+                            for (Point x2 = routers.startPoint(k2); x2 != y2; x2 = routers.next(x2)) {
+                                double deltaObj = obj.evaluateCrossExchangeMove(x1, y1, x2, y2);
+
+                                if (deltaObj < minDelta) {
+                                    minDelta = deltaObj;
+                                    cand.clear();
+                                    cand.add(new Move(x1, y1, x2, y2));
+                                } else if (deltaObj == minDelta) {
+                                    cand.add(new Move(x1, y1, x2, y2));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void search(int loop, final String TYPE) {
         initSolution();
         int i = 0;
         ArrayList<Move> cand = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> roadmaps = new ArrayList<>();
         Move m;
-
-       // GuiBKPost gui = new GuiBKPost("Gui BK Post Local Search", new Dimension(600, 600));
 
         while (i++ < loop) {
             switch (TYPE) {
@@ -242,37 +267,60 @@ public class BKPostLocalSearch {
                     mgr.performTwoOptMove1(m.x, m.y);
                     break;
 
+                case CROSS_EXCHANGE_MOVE:
+                    exploreNeighborhoodCrossExchangeMove(cand);
+                    if (cand.size() == 0) {
+                        System.out.println("Local Optimazation");
+                        break;
+                    }
+                    m = cand.get(R.nextInt(cand.size()));
+                    mgr.performCrossExchangeMove(m.x, m.y, m.x2, m.y2);
+                    break;
+
                 default:
                     System.err.println(TYPE + " not define");
+                    return;
             }
 
             System.out.println("Step " + i + ", objective = " + obj.getValue());
 
-            //draw GUI
-//            roadmaps.clear();
-//            for (int k = 1; k <= K; k++) {
-//                ArrayList<Integer> roadmap = new ArrayList<>();
-//                for (Point p = routers.startPoint(k); p != routers.endPoint(k); p = routers.next(p)) {
-//                    roadmap.add(p.ID);
-//                }
-//                roadmaps.add(roadmap);
-//            }
-//            gui.drawRouter(points, roadmaps);
         }
         System.out.println(routers.toString());
         for (int k = 1; k <= K; k++) {
             System.out.println("Time of router " + k + " = " + times[k - 1].getValue());
         }
+
+        //draw GUI
+        GuiBKPost gui = new GuiBKPost("Gui BK Post Local Search", new Dimension(600, 600));
+        ArrayList<ArrayList<Integer>> roadmaps = new ArrayList<>();
+        roadmaps.clear();
+        for (int k = 1; k <= K; k++) {
+            ArrayList<Integer> roadmap = new ArrayList<>();
+            for (Point p = routers.startPoint(k); p != routers.endPoint(k); p = routers.next(p)) {
+                roadmap.add(p.ID);
+            }
+            roadmaps.add(roadmap);
+        }
+        gui.drawRouter(points, roadmaps);
     }
 
 
     class Move {
         Point x;
         Point y;
+        Point x2;
+        Point y2;
 
         public Move(Point x, Point y) {
             this.x = x;
             this.y = y;
+        }
+
+        public Move(Point x, Point y, Point x2, Point y2) {
+            this.x = x;
+            this.y = y;
+            this.x2 = x2;
+            this.y2 = y2;
         }
     }
 
@@ -291,12 +339,12 @@ public class BKPostLocalSearch {
     }
 
     public static void main(String[] args) {
-        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_am_1000");
-        BKPostLocalSearch app = new BKPostLocalSearch(4, dataset);
+        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_am_20");
+        BKPostLocalSearch app = new BKPostLocalSearch(5, dataset);
 
         app.mapping();
         app.stateModel();
-        app.search(100, TWO_OPT_MOVE_1);
+        app.search(1000, ONE_POINT_MOVE);
     }
 
 }

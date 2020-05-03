@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/BKPostConstraintsPrograming.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2109">
-              <caret line="115" column="75" selection-start-line="115" selection-start-column="75" selection-end-line="115" selection-end-column="75" />
+            <state relative-caret-position="299">
+              <caret line="112" lean-forward="true" selection-start-line="112" selection-end-line="112" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -28,8 +28,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/BKPostLocalSearch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="299">
+              <caret line="345" column="25" lean-forward="true" selection-start-line="345" selection-start-column="25" selection-end-line="345" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -94,18 +94,12 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="BKPost" type="b2602c69:ProjectViewProjectNode" />
               <item name="BKPost" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="BKPost" type="b2602c69:ProjectViewProjectNode" />
-              <item name="BKPost" type="462c0819:PsiDirectoryNode" />
-              <item name="Dataset Local Search" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="BKPost" type="b2602c69:ProjectViewProjectNode" />
@@ -121,6 +115,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -219,7 +214,7 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49763033" visible="true" weight="0.16414523" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49763033" visible="true" weight="0.16641453" />
       <window_info id="Structure" order="1" sideWeight="0.50236964" side_tool="true" weight="0.26928896" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -472,8 +467,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/BKPostConstraintsPrograming.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2109">
-          <caret line="115" column="75" selection-start-line="115" selection-start-column="75" selection-end-line="115" selection-end-column="75" />
+        <state relative-caret-position="299">
+          <caret line="112" lean-forward="true" selection-start-line="112" selection-end-line="112" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -482,8 +477,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/BKPostLocalSearch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="299">
+          <caret line="345" column="25" lean-forward="true" selection-start-line="345" selection-start-column="25" selection-end-line="345" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
