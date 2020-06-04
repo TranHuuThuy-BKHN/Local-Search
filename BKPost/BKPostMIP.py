@@ -72,6 +72,12 @@ class PostMIP():
             self.solver.Add(self.solver.Sum(self.X[i, :]) == 1)
         # -----------------------------------------------------
 
+        # sum(X[i, j]) = 1, j = 0,1,2,...N-1, N+k, ...N+2k-1
+        for j in range(N+2*k):
+            if j < N or j >= N+k:
+                self.solver.Add(self.solver.Sum(self.X[:, j]) == 1)
+        # ---------------------------------------------------
+
         # sum(X[i, j]) = 0 , j = N,N-1, ..., N+k-1, next point of each point is not start depot
         for j in range(N, N+k):
             self.solver.Add(self.solver.Sum(self.X[:, j]) == 0)
@@ -98,6 +104,7 @@ class PostMIP():
                 self.solver.Add(self.times[j] - M*(1-self.X[i, j]) <= self.times[i] + self.dataset.demand[j] + distance(self.dataset.points[i], self.dataset.points[j]))
         #-----------------------------------------------------------
 
+
         # minimaze max times
         for i in range(N+k+1, N+2*k):
             self.solver.Add(self.times[i] <= self.times[N+k])
@@ -105,7 +112,7 @@ class PostMIP():
         
     def search(self):
         status = self.solver.Solve()
-        print('Number Contraints :',self.solver.NumConstraints())
+        print('Number Contraints :{0}, status : {1}'.format(self.solver.NumConstraints(), status))
         if status == pywraplp.Solver.OPTIMAL:
             print("Solution is found")
             for i in range(self.X.shape[0]):
@@ -115,10 +122,13 @@ class PostMIP():
             print('router')
             for r in self.router:
                 print(r.solution_value(), end=' ')
+            print('time')
+            for r in self.times:
+                print(r.solution_value(), end=' ')
             print()
 
 
 dataset = Dataset(path='./Dataset Local Search/data_10')
-app = PostMIP(dataset, 3)
+app = PostMIP(dataset, 2)
 app.stateModel()
 app.search()
