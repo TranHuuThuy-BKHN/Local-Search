@@ -55,7 +55,7 @@ public class BKPostConstraintsPrograming {
             model.arithm(router[N + i], "=", i + 1).post();
         }
 
-        // X[i] != X[j] với mọi i, j
+        // X[i] != X[j] với mọi i!= j
         model.allDifferent(X).post();
 
         // X[i] != N+k, i < N, k = 1,.., K

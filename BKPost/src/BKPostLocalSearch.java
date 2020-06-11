@@ -8,6 +8,9 @@ import localsearch.domainspecific.vehiclerouting.vrp.functions.MaxVR;
 import localsearch.domainspecific.vehiclerouting.vrp.invariants.AccumulatedWeightEdgesVR;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -212,6 +215,7 @@ public class BKPostLocalSearch {
                     for (Point x1 = routers.startPoint(k1); x1 != y1; x1 = routers.next(x1)) {
                         for (Point y2 = routers.startPoint(k2); y2 != routers.endPoint(k2); y2 = routers.next(y2)) {
                             for (Point x2 = routers.startPoint(k2); x2 != y2; x2 = routers.next(x2)) {
+
                                 double deltaObj = obj.evaluateCrossExchangeMove(x1, y1, x2, y2);
 
                                 if (deltaObj < minDelta) {
@@ -282,7 +286,7 @@ public class BKPostLocalSearch {
                     return;
             }
 
-            System.out.println("Step " + i + ", objective = " + obj.getValue());
+           System.out.println("Step " + i + ", objective = " + obj.getValue());
 
         }
         System.out.println(routers.toString());
@@ -338,13 +342,54 @@ public class BKPostLocalSearch {
         }
     }
 
-    public static void main(String[] args) {
-        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_am_20");
-        BKPostLocalSearch app = new BKPostLocalSearch(5, dataset);
-
+    public static void main(String[] args) throws IOException {
+//        File data = new File("Dataset Local Search");
+//
+//        File file = new File("Output Local Search");
+//        if (file.exists() == false) file.mkdir();
+//
+//        int loop = 1000;
+//        int k[] = new int[]{3, 8};
+//
+//        for (int s = 0; s < 10; s++) {
+//            File seed = new File(file.getPath() + "/Random seed " + s);
+//            if (seed.exists() == false) seed.mkdir();
+//
+//            for (File f : data.listFiles()) {
+//                File f1 = new File(seed.getAbsolutePath() + '/' + f.getName());
+//                if (f1.exists() == false) f1.mkdir();
+//
+//                String operator[] = new String[]{ONE_POINT_MOVE, TWO_POINTS_MOVE, TWO_OPT_MOVE_1, CROSS_EXCHANGE_MOVE};
+//                for (String o : operator) {
+//
+//                    DatasetLocalSearch dataset = new DatasetLocalSearch(f.getAbsolutePath());
+//                    BKPostLocalSearch app = new BKPostLocalSearch(k[0], dataset);
+//                    if (app.N > 100) app.K = k[1];
+//                    app.R.setSeed(s);
+//
+//                    File f2 = new File(f1.getAbsolutePath() + "/" + o + ".txt");
+//                    if (f2.exists() || (o.equals(CROSS_EXCHANGE_MOVE) && app.N >= 1000)) break;
+//
+//                    long timeS = System.currentTimeMillis();
+//                    app.mapping();
+//                    app.stateModel();
+//                    app.search(loop, o);
+//                    long timeE = System.currentTimeMillis();
+//                    System.out.println("Random seed " + s + ", loop = " + loop + ", " + f.getName() + ", " + o + ", time = " + (timeE - timeS) / 1000.0 + "s");
+//
+//                    FileWriter writer = new FileWriter(new File(f1.getAbsolutePath() + "/" + o + ".txt"));
+//                    writer.write("Random seed " + s + ", loop = " + loop + ", " + f.getName() + ", " + o + ", time = " + (timeE - timeS) / 1000.0 + "s");
+//                    writer.write("\nCost " + app.obj.getValue());
+//                    writer.write("\nRouter :\n" + app.routers.toString());
+//                    writer.close();
+//                }
+//            }
+        //}
+        DatasetLocalSearch dataset = new DatasetLocalSearch("./Dataset Local Search/data_am_5");
+        BKPostLocalSearch app = new BKPostLocalSearch(2,dataset);
         app.mapping();
         app.stateModel();
-        app.search(1000, ONE_POINT_MOVE);
+        app.search(100, ONE_POINT_MOVE);
     }
 
 }

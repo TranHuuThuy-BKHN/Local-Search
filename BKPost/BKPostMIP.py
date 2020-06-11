@@ -29,7 +29,7 @@ class Dataset(object):
 
 
 class PostMIP():
-    def __init__(self, dataset, k, M=1000000):
+    def __init__(self, dataset, k, M=100):
         self.dataset = dataset
         self.k, self.M = k,M
         self.dataset.points, self.dataset.demand = list(self.dataset.points),list(self.dataset.demand)
@@ -100,8 +100,10 @@ class PostMIP():
 
         for i in range(self.X.shape[0]):
             for j in range(self.X.shape[1]):
-                self.solver.Add(self.times[j] + M*(1-self.X[i, j]) >= self.times[i] + self.dataset.demand[j] + distance(self.dataset.points[i], self.dataset.points[j]))
-                self.solver.Add(self.times[j] - M*(1-self.X[i, j]) <= self.times[i] + self.dataset.demand[j] + distance(self.dataset.points[i], self.dataset.points[j]))
+                d = 0;
+                if j < N: d =  distance(self.dataset.points[i], self.dataset.points[j])
+                self.solver.Add(self.times[j] + M*(1-self.X[i, j]) >= self.times[i] + self.dataset.demand[j] +d)
+                self.solver.Add(self.times[j] - M*(1-self.X[i, j]) <= self.times[i] + self.dataset.demand[j] + d)
         #-----------------------------------------------------------
 
 
@@ -111,8 +113,11 @@ class PostMIP():
         self.solver.Minimize(self.times[N+k])
         
     def search(self):
+        print('Number of variables : ',self.solver.NumVariables())
+        print('Number of Contraints : ',self.solver.NumConstraints())
+        print('MIP is solving...')
         status = self.solver.Solve()
-        print('Number Contraints :{0}, status : {1}'.format(self.solver.NumConstraints(), status))
+        print('Status :', status)
         if status == pywraplp.Solver.OPTIMAL:
             print("Solution is found")
             for i in range(self.X.shape[0]):
@@ -128,7 +133,7 @@ class PostMIP():
             print()
 
 
-dataset = Dataset(path='./Dataset Local Search/data_10')
+dataset = Dataset(path='./Dataset Local Search/data_am_10')
 app = PostMIP(dataset, 2)
 app.stateModel()
 app.search()

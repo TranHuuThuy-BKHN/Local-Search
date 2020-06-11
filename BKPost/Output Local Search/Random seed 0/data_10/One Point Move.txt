@@ -1,0 +1,6 @@
+Random seed 0, loop = 1000, data_10, One Point Move, time = 0.882s
+Cost 47.09433072194648
+Router :
+route[1] = 0  -> 10  -> 4  -> 2  -> 5  -> 11
+route[2] = 0  -> 3  -> 8  -> 9  -> 12
+route[3] = 0  -> 6  -> 7  -> 1  -> 13

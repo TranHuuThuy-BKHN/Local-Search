@@ -1,0 +1,6 @@
+Random seed 0, loop = 1000, data_am_15, Two Points Move, time = 0.102s
+Cost 155.1329506368168
+Router :
+route[1] = 0  -> 3  -> 1  -> 5  -> 11  -> 2  -> 4  -> 16
+route[2] = 0  -> 8  -> 17
+route[3] = 0  -> 6  -> 13  -> 10  -> 15  -> 9  -> 7  -> 14  -> 12  -> 18

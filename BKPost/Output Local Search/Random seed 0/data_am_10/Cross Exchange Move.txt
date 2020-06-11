@@ -1,0 +1,6 @@
+Random seed 0, loop = 1000, data_am_10, Cross Exchange Move, time = 0.495s
+Cost 35.76409195040512
+Router :
+route[1] = 0  -> 5  -> 9  -> 10  -> 11
+route[2] = 0  -> 8  -> 7  -> 4  -> 3  -> 12
+route[3] = 0  -> 2  -> 1  -> 6  -> 13
